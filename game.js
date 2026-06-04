@@ -790,11 +790,6 @@ function render(dt) {
     // ---- Bullets ----
     for (const b of bulletPool) b.used = false;
     for (const b of st.bullets) {
-      if (b.owner === playerId) continue;
-      const m = getBulletMesh();
-      m.g.position.set(b.x, b.y, 0);
-    }
-    for (const b of localBullets) {
       const m = getBulletMesh();
       m.g.position.set(b.x, b.y, 0);
     }
