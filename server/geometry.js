@@ -79,11 +79,15 @@ function edgeDistSq(px, py, ax, ay, bx, by) {
   return (px - cx) ** 2 + (py - cy) ** 2;
 }
 
-function bulletHitHull(bx, by, _hull, r, ax, ay) {
+function bulletHitHull(bx, by, _hull, r, ax, ay, px, py) {
   const br = 0.08;
+  const hitR = r + br;
+  // endpoint check
   const dx = bx - ax;
   const dy = by - ay;
-  return dx * dx + dy * dy < (r + br) * (r + br);
+  if (dx * dx + dy * dy < hitR * hitR) return true;
+  // segment check — did the bullet path cross the asteroid circle?
+  return edgeDistSq(ax, ay, px, py, bx, by) < hitR * hitR;
 }
 
 function rand(min, max) {

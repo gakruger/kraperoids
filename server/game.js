@@ -256,11 +256,21 @@ function updateGame(g, dt, inputs) {
 
     for (let i = g.asteroids.length - 1; i >= 0; i--) {
       const a = g.asteroids[i];
-      const hull = asteroidHull(a);
       let hit = false;
       for (let j = g.bullets.length - 1; j >= 0; j--) {
         const b = g.bullets[j];
-        if (bulletHitHull(b.x, b.y, hull, a.r, a.x, a.y)) {
+        if (
+          bulletHitHull(
+            b.x,
+            b.y,
+            null,
+            a.r,
+            a.x,
+            a.y,
+            b.x - (b.vx * dt) / 3,
+            b.y - (b.vy * dt) / 3,
+          )
+        ) {
           hitAsteroid(g, a, b.owner);
           g.bullets.splice(j, 1);
           hit = true;
