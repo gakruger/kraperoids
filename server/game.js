@@ -8,14 +8,7 @@ const {
   PLANET_R,
   PLANET_SPEED,
 } = require("./constants");
-const {
-  asteroidHull,
-  pointInHull,
-  edgeDistSq,
-  bulletHitHull,
-  rand,
-  wrap,
-} = require("./geometry");
+const { edgeDistSq, bulletHitHull, rand, wrap } = require("./geometry");
 
 function createGame() {
   return {
@@ -286,28 +279,9 @@ function updateGame(g, dt, inputs) {
     if (s.lives <= 0 || s.invuln > 0) continue;
     for (let i = g.asteroids.length - 1; i >= 0; i--) {
       const a = g.asteroids[i];
-      const hull = asteroidHull(a);
-      let shipHit = pointInHull(s.x, s.y, hull);
-      if (!shipHit) {
-        for (let k = 0; k < hull.length; k++) {
-          const l = (k + 1) % hull.length;
-          if (
-            edgeDistSq(
-              s.x,
-              s.y,
-              hull[k][0],
-              hull[k][1],
-              hull[l][0],
-              hull[l][1],
-            ) <
-            SHIP_R * SHIP_R
-          ) {
-            shipHit = true;
-            break;
-          }
-        }
-      }
-      if (shipHit) {
+      const dx = s.x - a.x;
+      const dy = s.y - a.y;
+      if (dx * dx + dy * dy < (a.r + SHIP_R) * (a.r + SHIP_R)) {
         spawnParticles(g, s.x, s.y, 20);
         s.lives--;
         if (s.lives <= 0) {
