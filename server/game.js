@@ -87,6 +87,20 @@ function spawnParticles(g, x, y, n) {
   }
 }
 
+function spawnConfetti(g, x, y) {
+  for (let i = 0; i < 60; i++) {
+    const a = rand(0, Math.PI * 2);
+    const s = rand(2, 7);
+    g.particles.push({
+      x,
+      y,
+      vx: Math.cos(a) * s * rand(0.5, 1),
+      vy: Math.sin(a) * s * rand(0.5, 1),
+      life: rand(0.5, 1.0),
+    });
+  }
+}
+
 function splitAsteroid(g, a) {
   const idx = a.size;
   if (idx < 2) {
@@ -234,7 +248,11 @@ function updateGame(g, dt, inputs) {
       b.x += (b.vx * dt) / 6;
       b.y += (b.vy * dt) / 6;
       b.life -= dt / 6;
-      if (b.life <= 0 || Math.abs(b.x) > BOUNDS || Math.abs(b.y) > BOUNDS) {
+      if (
+        b.life <= 0 ||
+        Math.abs(b.x) > BOUNDS + 1.5 ||
+        Math.abs(b.y) > BOUNDS + 1.5
+      ) {
         g.bullets.splice(i, 1);
       }
     }
@@ -284,7 +302,7 @@ function updateGame(g, dt, inputs) {
       const dx = s.x - a.x;
       const dy = s.y - a.y;
       if (dx * dx + dy * dy < (a.r + SHIP_R) * (a.r + SHIP_R)) {
-        spawnParticles(g, s.x, s.y, 20);
+        spawnConfetti(g, s.x, s.y);
         s.lives--;
         if (s.lives <= 0) {
           s.lives = 0;
@@ -307,7 +325,7 @@ function updateGame(g, dt, inputs) {
     const dx = s.x - p.x;
     const dy = s.y - p.y;
     if (dx * dx + dy * dy < (SHIP_R + PLANET_R) * (SHIP_R + PLANET_R)) {
-      spawnParticles(g, s.x, s.y, 20);
+      spawnConfetti(g, s.x, s.y);
       s.lives--;
       if (s.lives <= 0) {
         s.lives = 0;
