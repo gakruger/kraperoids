@@ -169,6 +169,13 @@
         font-size: 13px;
         margin: 8px 0;
       }
+      #lobby .hitcount {
+        position: fixed;
+        bottom: 12px;
+        right: 16px;
+        font-size: 12px;
+        color: #444;
+      }
 
       #ui {
         position: absolute;
@@ -278,6 +285,7 @@
         <button class="btn" id="startBtn" style="display: none">Start Game</button>
         <button class="btn" id="leaveBtn">Leave</button>
       </div>
+      <div class="hitcount"><span id="hits">0</span> unique visitors</div>
     </div>
 
     <div id="ui" style="display: none">

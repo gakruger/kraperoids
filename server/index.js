@@ -9,7 +9,16 @@ const { createGame, updateGame, serializeState, initPlayerShip, initLevel } = re
 
 const PORT = process.env.PORT || 10000
 const FILE = path.join(__dirname, "..", "index.html")
+const HITS = path.join(__dirname, "..", "hits.json")
 const mime = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css" }
+
+let hits = 0
+const seen = new Set()
+try {
+  const d = JSON.parse(fs.readFileSync(HITS, "utf-8"))
+  hits = d.hits || 0
+  for (const ip of d.seen || []) seen.add(ip)
+} catch {}
 
 const server = http.createServer((req, res) => {
   if (req.url === "/") {
@@ -56,7 +65,15 @@ function handleDisconnect(ws) {
   }
 }
 
-wss.on("connection", (ws) => {
+function trackHit(ip) {
+  if (!ip || seen.has(ip)) return
+  seen.add(ip)
+  hits++
+  fs.writeFile(HITS, JSON.stringify({ hits, seen: [...seen] }), () => {})
+}
+
+wss.on("connection", (ws, req) => {
+  trackHit(req.socket.remoteAddress)
   conns.set(ws, null)
 
   ws.on("message", (raw) => {
@@ -124,7 +141,7 @@ wss.on("connection", (ws) => {
       for (const [id, room] of rooms) {
         list.push({ id, players: room.pids.length, max: 4, inGame: room.game.running })
       }
-      send(ws, { type: "rooms", list })
+      send(ws, { type: "rooms", list, hits })
     } else if (msg.type === "start") {
       const c = conns.get(ws)
       if (!c) return

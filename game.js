@@ -148,6 +148,8 @@ function onMsg(e) {
       showErr(msg.msg)
     } else if (msg.type === "rooms") {
       renderRoomList(msg.list)
+      const el = document.getElementById("hits")
+      if (el && msg.hits != null) el.textContent = `${msg.hits}`
     } else if (msg.type === "gameStart") {
       startGame()
     } else if (msg.type === "state") {
