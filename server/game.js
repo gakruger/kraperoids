@@ -228,22 +228,22 @@ function updateGame(g, dt, inputs) {
   }
 
   // bullets + asteroids with sub-steps (prevents tunneling)
-  for (let s = 0; s < 3; s++) {
+  for (let s = 0; s < 6; s++) {
     for (let i = g.bullets.length - 1; i >= 0; i--) {
       const b = g.bullets[i];
-      b.x += (b.vx * dt) / 3;
-      b.y += (b.vy * dt) / 3;
-      b.life -= dt / 3;
+      b.x += (b.vx * dt) / 6;
+      b.y += (b.vy * dt) / 6;
+      b.life -= dt / 6;
       if (b.life <= 0 || Math.abs(b.x) > BOUNDS || Math.abs(b.y) > BOUNDS) {
         g.bullets.splice(i, 1);
       }
     }
 
     for (const a of g.asteroids) {
-      a.x += (a.vx * dt) / 3;
-      a.y += (a.vy * dt) / 3;
-      a.rotX += ((a.vy * dt) / 3) * 0.5;
-      a.rotY += ((a.vx * dt) / 3) * 0.5;
+      a.x += (a.vx * dt) / 6;
+      a.y += (a.vy * dt) / 6;
+      a.rotX += ((a.vy * dt) / 6) * 0.5;
+      a.rotY += ((a.vx * dt) / 6) * 0.5;
       wrap(a);
     }
 
@@ -260,8 +260,10 @@ function updateGame(g, dt, inputs) {
             a.r,
             a.x,
             a.y,
-            b.x - (b.vx * dt) / 3,
-            b.y - (b.vy * dt) / 3,
+            b.x - (b.vx * dt) / 6,
+            b.y - (b.vy * dt) / 6,
+            a.x - (a.vx * dt) / 6,
+            a.y - (a.vy * dt) / 6,
           )
         ) {
           hitAsteroid(g, a, b.owner);

@@ -11,13 +11,17 @@ function edgeDistSq(px, py, ax, ay, bx, by) {
   return (px - cx) ** 2 + (py - cy) ** 2;
 }
 
-function bulletHitHull(bx, by, _hull, r, ax, ay, px, py) {
-  const br = 0.08;
+function bulletHitHull(bx, by, _hull, r, ax, ay, px, py, aox, aoy) {
+  const br = 0.15;
   const hitR = r + br;
   // endpoint check
   const dx = bx - ax;
   const dy = by - ay;
   if (dx * dx + dy * dy < hitR * hitR) return true;
+  // start-of-substep asteroid position check
+  const odx = bx - aox;
+  const ody = by - aoy;
+  if (odx * odx + ody * ody < hitR * hitR) return true;
   // segment check — did the bullet path cross the asteroid circle?
   return edgeDistSq(ax, ay, px, py, bx, by) < hitR * hitR;
 }
