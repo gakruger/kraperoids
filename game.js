@@ -19,8 +19,7 @@ let earlyOutShown = false;
 // ---- Lobby ----
 const lobbyEl = document.getElementById("lobby");
 const createBtn = document.getElementById("createBtn");
-const joinBtn = document.getElementById("joinBtn");
-const joinInput = document.getElementById("joinInput");
+
 const roomCode = document.getElementById("roomCode");
 const playerList = document.getElementById("playerList");
 const startBtn = document.getElementById("startBtn");
@@ -84,7 +83,6 @@ function setLobby(s) {
   uiEl.style.display = s === "game" ? "" : "none";
   const inLobby = s === "lobby";
   createBtn.disabled = !inLobby;
-  joinBtn.disabled = !inLobby;
   if (s === "room") {
     roomInfo.style.display = "";
     stopRoomsRefresh();
@@ -228,9 +226,7 @@ function renderRoomList(rooms) {
   // click-to-join
   for (const el of roomList.querySelectorAll(".room-entry:not(.full)")) {
     el.addEventListener("click", () => {
-      const code = el.dataset.room;
-      joinInput.value = code;
-      sendWs({ type: "join", room: code });
+      sendWs({ type: "join", room: el.dataset.room });
     });
   }
 }
@@ -252,18 +248,6 @@ function stopRoomsRefresh() {
 createBtn.addEventListener("click", () => {
   if (lobbyState !== "lobby") return;
   sendWs({ type: "create" });
-});
-joinBtn.addEventListener("click", () => {
-  if (lobbyState !== "lobby") return;
-  const code = joinInput.value.trim().toUpperCase();
-  if (code.length < 4) {
-    showErr("Enter a 4-char code");
-    return;
-  }
-  sendWs({ type: "join", room: code });
-});
-joinInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") joinBtn.click();
 });
 
 document.addEventListener("keydown", (e) => {
