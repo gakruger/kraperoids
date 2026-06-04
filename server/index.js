@@ -9,16 +9,10 @@ const { createGame, updateGame, serializeState, initPlayerShip, initLevel } = re
 
 const PORT = process.env.PORT || 10000
 const FILE = path.join(__dirname, "..", "index.html")
-const HITS = path.join(__dirname, "..", "hits.json")
 const mime = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css" }
 
 let hits = 0
 const seen = new Set()
-try {
-  const d = JSON.parse(fs.readFileSync(HITS, "utf-8"))
-  hits = d.hits || 0
-  for (const ip of d.seen || []) seen.add(ip)
-} catch {}
 
 const server = http.createServer((req, res) => {
   if (req.url === "/") {
@@ -69,7 +63,6 @@ function trackHit(ip) {
   if (!ip || seen.has(ip)) return
   seen.add(ip)
   hits++
-  fs.writeFile(HITS, JSON.stringify({ hits, seen: [...seen] }), () => {})
 }
 
 wss.on("connection", (ws, req) => {
