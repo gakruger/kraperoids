@@ -494,7 +494,11 @@ function getParticleMesh() {
     const geo = new THREE.SphereGeometry(0.1, 4, 4);
     const mesh = new THREE.Mesh(
       geo,
-      new THREE.MeshBasicMaterial({ color: 0xaaaaaa }),
+      new THREE.MeshBasicMaterial({
+        color: 0xaaaaaa,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      }),
     );
     mesh.visible = false;
     scene.add(mesh);
@@ -803,6 +807,7 @@ function render(dt) {
     }
 
     // ---- Particles ----
+    const sparkle = performance.now() / 1000;
     for (const p of particlePool) p.used = false;
     for (const p of st.particles) {
       const m = getParticleMesh();
@@ -810,6 +815,9 @@ function render(dt) {
       const a = Math.max(0, p.life / 0.6);
       m.mesh.material.opacity = a;
       m.mesh.material.transparent = true;
+      const twinkle = 0.5 + 0.5 * Math.sin(p.x * 7 + p.y * 13 + sparkle * 4);
+      const s = 0.5 + twinkle;
+      m.mesh.scale.set(s, s, s);
     }
     for (const p of particlePool) {
       if (!p.used) p.mesh.visible = false;
