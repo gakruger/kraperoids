@@ -59,14 +59,13 @@ function handleDisconnect(ws) {
   }
 }
 
-function trackHit(ip) {
-  if (!ip || seen.has(ip)) return
-  seen.add(ip)
+function trackHit(sid) {
+  if (!sid || seen.has(sid)) return
+  seen.add(sid)
   hits++
 }
 
-wss.on("connection", (ws, req) => {
-  trackHit(req.socket.remoteAddress)
+wss.on("connection", (ws) => {
   conns.set(ws, null)
 
   ws.on("message", (raw) => {
@@ -130,6 +129,7 @@ wss.on("connection", (ws, req) => {
         if (other !== ws) send(other, { type: "playerJoined", playerId: pid, players: room.pids })
       }
     } else if (msg.type === "rooms") {
+      trackHit(msg.sid)
       const list = []
       for (const [id, room] of rooms) {
         list.push({ id, players: room.pids.length, max: 4, inGame: room.game.running })

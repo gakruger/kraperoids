@@ -194,8 +194,17 @@ function updatePlayerList(pids) {
   playerList.innerHTML = html
 }
 
+function getSid() {
+  let s = localStorage.getItem("kraperoids_sid")
+  if (!s) {
+    s = Math.random().toString(36).slice(2, 10)
+    localStorage.setItem("kraperoids_sid", s)
+  }
+  return s
+}
+
 function requestRooms() {
-  sendWs({ type: "rooms" })
+  sendWs({ type: "rooms", sid: getSid() })
 }
 
 function renderRoomList(rooms) {
