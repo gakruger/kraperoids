@@ -7,7 +7,7 @@ const { BOUNDS, DT, SEND_INTERVAL } = require("./constants")
 const { genId } = require("./geometry")
 const { createGame, updateGame, serializeState, initPlayerShip, initLevel } = require("./game")
 
-const PORT = process.env.PORT || 10000
+const PORT = process.env.PORT || 6022
 const FILE = path.join(__dirname, "..", "index.html")
 const mime = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css" }
 
