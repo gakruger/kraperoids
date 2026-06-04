@@ -152,7 +152,6 @@ function onMsg(e) {
       startGame();
     } else if (msg.type === "state") {
       serverState = msg;
-      reconcileBullets(msg);
       const ms = msg.ships[playerId];
       if (ms && ms.lives <= 0 && msg.running && !earlyOutShown) {
         earlyOutShown = true;
@@ -658,7 +657,6 @@ function updateLocalShip(dt) {
       vx: dx * 14,
       vy: dy * 14,
       life: 1.2,
-      created: performance.now(),
     });
   }
 
@@ -673,18 +671,6 @@ function updateLocalShip(dt) {
 
 // ---- State ----
 let prevAsteroidIds = new Set();
-
-function reconcileBullets(st) {
-  const now = performance.now();
-  for (let i = localBullets.length - 1; i >= 0; i--) {
-    const lb = localBullets[i];
-    if (now - lb.created < 100) continue;
-    const match = st.bullets.some(
-      (sb) => sb.owner === playerId && Math.hypot(sb.x - lb.x, sb.y - lb.y) < 2,
-    );
-    if (!match) localBullets.splice(i, 1);
-  }
-}
 
 function startGame() {
   gameActive = true;
