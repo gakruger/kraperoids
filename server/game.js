@@ -88,15 +88,15 @@ function spawnParticles(g, x, y, n) {
 }
 
 function spawnConfetti(g, x, y) {
-  for (let i = 0; i < 60; i++) {
+  for (let i = 0; i < 150; i++) {
     const a = rand(0, Math.PI * 2);
-    const s = rand(2, 7);
+    const s = rand(3, 12);
     g.particles.push({
       x,
       y,
       vx: Math.cos(a) * s * rand(0.5, 1),
       vy: Math.sin(a) * s * rand(0.5, 1),
-      life: rand(0.5, 1.0),
+      life: rand(0.8, 2.0),
     });
   }
 }

@@ -491,7 +491,7 @@ const PARTICLE_COLORS = [
 function getParticleMesh() {
   let m = particlePool.find((p) => !p.used);
   if (!m) {
-    const geo = new THREE.SphereGeometry(0.05, 4, 4);
+    const geo = new THREE.SphereGeometry(0.1, 4, 4);
     const mesh = new THREE.Mesh(
       geo,
       new THREE.MeshBasicMaterial({ color: 0xaaaaaa }),
