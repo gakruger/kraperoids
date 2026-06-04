@@ -231,7 +231,7 @@ function updateGame(g, dt, inputs) {
       let hit = false
       for (let j = g.bullets.length - 1; j >= 0; j--) {
         const b = g.bullets[j]
-        if (bulletHitHull(b.x, b.y, hull)) {
+        if (bulletHitHull(b.x, b.y, hull, a.r)) {
           hitAsteroid(g, a, b.owner)
           g.bullets.splice(j, 1)
           hit = true

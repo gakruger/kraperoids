@@ -76,9 +76,9 @@ function edgeDistSq(px, py, ax, ay, bx, by) {
   return (px - cx) ** 2 + (py - cy) ** 2
 }
 
-function bulletHitHull(bx, by, hull) {
+function bulletHitHull(bx, by, hull, r) {
   if (pointInHull(bx, by, hull)) return true
-  const M = 0.15
+  const M = Math.max(0.15, r * 0.2)
   for (let k = 0; k < hull.length; k++) {
     const l = (k + 1) % hull.length
     if (edgeDistSq(bx, by, hull[k][0], hull[k][1], hull[l][0], hull[l][1]) < M * M) return true

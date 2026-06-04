@@ -346,7 +346,11 @@ window.addEventListener("resize", () => {
 // ---- Starfield ----
 const starCount = 500
 const starPos = new Float32Array(starCount * 3)
-for (let i = 0; i < starCount * 3; i++) starPos[i] = (Math.random() - 0.5) * 60
+for (let i = 0; i < starCount; i++) {
+  starPos[i * 3] = (Math.random() - 0.5) * 60
+  starPos[i * 3 + 1] = (Math.random() - 0.5) * 60
+  starPos[i * 3 + 2] = Math.random() * -30 - 5
+}
 const starGeo = new THREE.BufferGeometry()
 starGeo.setAttribute("position", new THREE.BufferAttribute(starPos, 3))
 const stars = new THREE.Points(
